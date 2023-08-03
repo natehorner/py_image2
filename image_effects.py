@@ -202,9 +202,76 @@ def im_photo_negative(im_in):
 
     return im_out
            
+"""
+subtract edge detection from image to add dark outlines
 
+hope it works!
+"""
+def im_outline(im_in):
     
- 
+    width,height = im_in.size
+    im_out = Image.new(mode="RGB",size=(width,height))
+    
+    kernel_sqrt = 3
+    kernel = [ [1, 0, -1], [2, 0, -2], [1, 0, -1] ]
+
+    for x in range(width) :
+        for y in range(height) :
+            
+            #outline pixel
+            outpixel = [0,0,0]
+            
+            #outline transpose
+            outpixel_t = [0,0,0]
+            
+            #final pixel
+            fpixel = [0,0,0]
+            
+            for i in range(kernel_sqrt) :
+                for j in range(kernel_sqrt) : 
+                    thisx = x + i - math.floor(kernel_sqrt/2)
+                    thisy = y + j - math.floor(kernel_sqrt/2)
+                    
+                    if thisx < 0:
+                        thisx = 0
+                    if thisy < 0:
+                        thisy = 0
+                    if thisx >= width:
+                        thisx = width-1
+                    if thisy >= height:
+                        thisy = height-1
+                        
+                    inpixels = im_in.getpixel((thisx,thisy))
+                
+                    #compute this pixels contribution to output and add
+                    for color in range(colors) :
+                        outpixel[color] += kernel[i][j]*inpixels[color]
+                        outpixel_t[color] += kernel[j][i]*inpixels[color]
+
+            for color in range(colors) :
+                outpixel[color] = math.sqrt( pow(outpixel[color],2) + pow(outpixel_t[color],2) )
+                outpixel[color] = round(outpixel[color])
+                
+                if outpixel[color] < 0:
+                    outpixel[color] = 0
+            
+                #outpixel is the outline negative.  COpy input and subtract negative
+                fpixel[color] = inpixels[color] - outpixel[color]
+                
+                if fpixel[color] < 0:
+                    fpixel[color] = 0            
+                if fpixel[color] > 255 :
+                    fpixel[color] = 255
+                
+            
+            #put pixel in the output image
+            im_out.putpixel( (x,y), tuple(fpixel) )
+            
+            #progress print - big images take a while...
+            if ((y+height*x)%200000) == 0 :
+                print("Finished " + str(round((100.0*(y+height*x))/(width*height),2)) + " percent") 
+    
+    return im_out 
     
  
     

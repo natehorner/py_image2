@@ -16,8 +16,9 @@ open the file -     any jpg, png or other files in same directory
                     (or multi layered - expects 3 values per pixel)
 """
 #im_in = Image.open("images/checkerboard2.png")
-im_in = Image.open("images/cold.jpg")
-#im_in = Image.open("images/bird.jpg")
+#im_in = Image.open("images/cold.jpg")
+im_in = Image.open("images/bird.jpg")
+#im_in = Image.open("images/sample.jpg")
 
 
 #do stuff
@@ -25,11 +26,15 @@ im_in = Image.open("images/cold.jpg")
 #im_out = image_effects.im_avg_filter(im_in, 9)
 
 #im_out = image_effects.im_edge_detect(im_in, False)
-im_out = image_effects.im_edge_detect(im_in, True)
+#im_out = image_effects.im_edge_detect(im_in, True)
 
 #im_out = image_effects.im_simplify_colors(im_in,63)
 
 #im_out = image_effects.im_photo_negative(im_in)
+
+im_out = image_effects.im_avg_filter(im_in,9)
+im_out = image_effects.im_simplify_colors(im_in,40)
+im_out = image_effects.im_outline(im_out)
 
 im_out.show()
 im_in.show()
