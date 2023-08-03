@@ -70,7 +70,7 @@ def im_avg_filter(im_in, size_sqrt) :
     
     return im_out
 
-def im_edge_detect(im_in) :
+def im_edge_detect(im_in, inverse) :
     
     width,height = im_in.size
     im_out = Image.new(mode="RGB",size=(width,height))
@@ -118,6 +118,9 @@ def im_edge_detect(im_in) :
                 if outpixel[color] < 0:
                     outpixel[color] = 0
 
+                if inverse == True :
+                    outpixel[color] = 255 - outpixel[color]
+                    
             #put pixel in the output image
             im_out.putpixel( (x,y), tuple(outpixel) )
             
@@ -199,7 +202,7 @@ def im_photo_negative(im_in):
 
     return im_out
            
- 
+
     
  
     
