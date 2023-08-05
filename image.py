@@ -32,9 +32,17 @@ im_in = Image.open("images/bird.jpg")
 
 #im_out = image_effects.im_photo_negative(im_in)
 
-im_out = image_effects.im_avg_filter(im_in,9)
-im_out = image_effects.im_simplify_colors(im_in,40)
-im_out = image_effects.im_outline(im_out)
+#im_out = image_effects.im_avg_filter(im_in,9)
+#im_out = image_effects.im_simplify_colors(im_in,40)
+#im_out = image_effects.im_outline(im_out)
+
+#im_out = image_effects.im_diff(im_in,im_in)
+
+im_edge = image_effects.im_edge_detect(im_in,True)
+im_blur = image_effects.im_avg_filter(im_in,9)
+im_out = image_effects.im_min(im_blur,im_edge)
+
+
 
 im_out.show()
 im_in.show()

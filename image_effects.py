@@ -274,9 +274,91 @@ def im_outline(im_in):
     return im_out 
     
  
-    
+def im_diff(im1, im2, negative_out_mode) :
+    width,height = im1.size
+    im_out = Image.new(mode="RGB",size=(width,height))
  
+    #check size matches
+    width2,height2 = im2.size
+    if width != width2 or height != height2 :
+        print("im_diff error: both images must be same dimensions")
+        return
+     
+    for x in range(width):
+        for y in range(height):
+            p1 = im1.getpixel((x,y))
+            p2 = im2.getpixel((x,y))
+             
+            outp = []
+            
+            for color in range( len(p1) ):
+                outp.append( abs(p1[color] - p2[color]))
+                
+                if(outp[color] > 255):
+                    outp[color] = 255;
+                if(negative_out_mode) :
+                    outp[color] = 255 - outp[color]
+                    
+            im_out.putpixel( (x,y), tuple(outp) )
     
+    return im_out
+
+def im_sum(im1,im2):
+    width,height = im1.size
+    im_out = Image.new(mode="RGB",size=(width,height))
+ 
+    #check size matches
+    width2,height2 = im2.size
+    if width != width2 or height != height2 :
+        print("im_sum error: both images must be same dimensions")
+        return
+     
+    for x in range(width):
+        for y in range(height):
+            p1 = im1.getpixel((x,y))
+            p2 = im2.getpixel((x,y))
+             
+            outp = []
+            
+            for color in range( len(p1) ):
+                outp.append( p1[color] + p2[color])
+                
+                if(outp[color] > 255):
+                    outp[color] = 255;
+                    
+            im_out.putpixel( (x,y), tuple(outp) )
+    
+    return im_out
+
+                 
+#minimum value between two images per pixel per color 
+def im_min(im1,im2):
+    width,height = im1.size
+    im_out = Image.new(mode="RGB",size=(width,height))
+ 
+    #check size matches
+    width2,height2 = im2.size
+    if width != width2 or height != height2 :
+        print("im_min error: both images must be same dimensions")
+        return
+     
+    for x in range(width):
+        for y in range(height):
+            p1 = im1.getpixel((x,y))
+            p2 = im2.getpixel((x,y))
+             
+            outp = []
+            
+            for color in range( len(p1) ):
+                if p1[color] < p2[color] :
+                    outp.append( p1[color])
+                else :
+                    outp.append(p2[color])
+                
+                    
+            im_out.putpixel( (x,y), tuple(outp) )
+    
+    return im_out
  
     
  
