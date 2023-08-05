@@ -360,6 +360,55 @@ def im_min(im1,im2):
     
     return im_out
  
+def im_1d_transform(row_mode,im_in):
+       
+    width,height = im_in.size
+    im_out = Image.new(mode="RGB",size=(width,height))
+
+    outer_size = 0
+    inner_size = 0
+    
+    if row_mode :
+        outer_size = height
+        inner_size = width
+    else :
+        outer_size = width
+        inner_size = height
+    
+    for i in range(outer_size):
+
+        for color in range(colors) :
+        
+            in_arr = []
+            for j in range(inner_size):
+                inpixel = 0
+                if row_mode :
+                    inpixel = im_in.getpixel((j,i))
+                else:
+                    inpixel = im_in.getpixel((i,j))
+                
+                in_arr.append(inpixel[color])
+            
+            #out_arr = nfuncl.bad_fft(in_arr)
+            
+            for j in range(inner_size):
+                outp = []
+                outpixel = 0
+                if row_mode :
+                    outpixel = im_out.getpixel((j,i))
+                else:
+                    outpixel = im_out.getpixel((i,j))
+                
+                for c1 in range(colors) :
+                    if color != c1:
+                        outp.append(outpixel[c1])
+                    else :
+                        outp[color] = out_arr[j]
+                
+                im_out.putpixel(tuple(outp))
+
+    return im_out
+                    
     
  
                 
