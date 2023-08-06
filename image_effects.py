@@ -7,6 +7,8 @@ Created on Wed Aug  2 17:39:40 2023
 
 import math
 from PIL import Image
+import bad_math
+import cmath
 
 #only works with RGB pictures!
 colors = 3
@@ -360,10 +362,20 @@ def im_min(im1,im2):
     
     return im_out
  
-def im_1d_transform(row_mode,im_in):
+def im_1d_transform(im_in,row_mode):
        
     width,height = im_in.size
-    im_out = Image.new(mode="RGB",size=(width,height))
+    arr_out = [];
+    for i in range(width):
+        arr_2d_out = []
+        for j in range(height):
+            arr_1d_out = []
+            for color in range(colors):
+                arr_1d_out.append( complex(0,0) )
+            
+            arr_2d_out.append(arr_1d_out)
+        arr_out.append(arr_2d_out)
+            
 
     outer_size = 0
     inner_size = 0
@@ -389,25 +401,15 @@ def im_1d_transform(row_mode,im_in):
                 
                 in_arr.append(inpixel[color])
             
-            #out_arr = nfuncl.bad_fft(in_arr)
+            freq_arr = bad_math.bad_dft(in_arr)
             
             for j in range(inner_size):
-                outp = []
-                outpixel = 0
                 if row_mode :
-                    outpixel = im_out.getpixel((j,i))
-                else:
-                    outpixel = im_out.getpixel((i,j))
-                
-                for c1 in range(colors) :
-                    if color != c1:
-                        outp.append(outpixel[c1])
-                    else :
-                        outp[color] = out_arr[j]
-                
-                im_out.putpixel(tuple(outp))
+                    arr_out[j][i][color] = freq_arr[j]
+                else :
+                    arr_out[i][j] = freq_arr[j]
 
-    return im_out
+    return arr_out
                     
     
  

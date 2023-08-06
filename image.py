@@ -15,9 +15,9 @@ open the file -     any jpg, png or other files in same directory
                     DOES NOT SUPPORT BLACK AND WHITE IMAGES RIGHT NOW!
                     (or multi layered - expects 3 values per pixel)
 """
-#im_in = Image.open("images/checkerboard2.png")
+im_in = Image.open("images/checkerboard2.png")
 #im_in = Image.open("images/cold.jpg")
-im_in = Image.open("images/bird.jpg")
+#im_in = Image.open("images/bird.jpg")
 #im_in = Image.open("images/sample.jpg")
 
 
@@ -38,11 +38,11 @@ im_in = Image.open("images/bird.jpg")
 
 #im_out = image_effects.im_diff(im_in,im_in)
 
-im_edge = image_effects.im_edge_detect(im_in,True)
-im_blur = image_effects.im_avg_filter(im_in,9)
-im_out = image_effects.im_min(im_blur,im_edge)
+#im_edge = image_effects.im_edge_detect(im_in,True)
+#im_blur = image_effects.im_avg_filter(im_in,9)
+#im_out = image_effects.im_min(im_blur,im_edge)
 
+#im_out.show()
+#im_in.show()
 
-
-im_out.show()
-im_in.show()
+image_effects.im_1d_transform(im_in,True)
