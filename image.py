@@ -42,7 +42,15 @@ im_in = Image.open("images/checkerboard2.png")
 #im_blur = image_effects.im_avg_filter(im_in,9)
 #im_out = image_effects.im_min(im_blur,im_edge)
 
-#im_out.show()
-#im_in.show()
 
-image_effects.im_1d_transform(im_in,True)
+#arr_out = image_effects.im_to_3d_arr(im_in)
+#im_out = image_effects.carr_to_im(arr_out, True)
+
+arr_in = image_effects.im_to_3d_arr(im_in)
+arr_transf = image_effects.transform_2d_arr_1d(arr_in, True, False)
+arr_culled = image_effects.cull_3d_arry(arr_transf, .5)
+arr_invtransf = image_effects.transform_2d_arr_1d(arr_culled, True, True)
+im_out = image_effects.carr_to_im(arr_invtransf, True)
+
+im_out.show()
+im_in.show()

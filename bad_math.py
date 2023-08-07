@@ -30,3 +30,21 @@ def bad_dft(in_arr):
         
         out_arr.append(csum)
     return out_arr
+
+
+def bad_idft(in_arr):
+    
+    N = len(in_arr)
+    
+    out_arr = [];
+    for f in range(N):
+    
+        csum = complex(0,0)
+        
+        for n in range (N):
+            csum= csum + in_arr[n] * cmath.exp( complex(0,2)*n*f*cmath.pi/N )
+            
+        csum = csum/N
+        
+        out_arr.append(csum)
+    return out_arr

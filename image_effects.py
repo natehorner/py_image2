@@ -361,10 +361,67 @@ def im_min(im1,im2):
             im_out.putpixel( (x,y), tuple(outp) )
     
     return im_out
- 
-def im_1d_transform(im_in,row_mode):
-       
+
+
+def im_to_3d_arr(im_in) :
+    
     width,height = im_in.size
+    arr_out = [];
+    
+    for i in range(width):
+        arr_2d_out = []
+        for j in range(height):
+            arr_1d_out = []
+            
+            inpixel = im_in.getpixel((i,j))
+            
+            for color in range(colors):
+                arr_1d_out.append( complex(inpixel[color],0) )
+            
+            arr_2d_out.append(arr_1d_out)
+        arr_out.append(arr_2d_out)
+
+    return arr_out;
+
+#return complex arry back to image - mode = true returns only real
+#mode = false gives absolute magnitude per value
+def carr_to_im(arr_in, concat_mode) :
+    
+    width = len(arr_in)
+    height = len(arr_in[0])
+    
+    im_out = Image.new(mode="RGB",size=(width,height))
+ 
+    for i in range(width):
+        for j in range(height):
+            
+            outp = []
+            
+            for color in range(colors):
+                val = 0;
+                ival = complex(arr_in[i][j][color])
+                if concat_mode == True :
+                    val = round(ival.real)
+                else:
+                    val = round( cmath.magnitude(ival) )
+                    
+                if val > 255:
+                    val = 255
+                elif val < 0 :
+                    val = 0
+                
+                outp.append(val)
+            im_out.putpixel((i,j),tuple(outp))
+            
+    return im_out
+
+
+#transform either X or Y direction
+def transform_2d_arr_1d(arr_in,row_mode,inverse_mode):
+       
+    width = len(arr_in)
+    height = len(arr_in[0])
+    
     arr_out = [];
     for i in range(width):
         arr_2d_out = []
@@ -393,15 +450,19 @@ def im_1d_transform(im_in,row_mode):
         
             in_arr = []
             for j in range(inner_size):
-                inpixel = 0
+                inval = 0;
                 if row_mode :
-                    inpixel = im_in.getpixel((j,i))
-                else:
-                    inpixel = im_in.getpixel((i,j))
-                
-                in_arr.append(inpixel[color])
+                    inval = arr_in[j][i][color]
+                else :
+                    inval = arr_in[i][j][color]
+                    
+                in_arr.append(inval)                
             
-            freq_arr = bad_math.bad_dft(in_arr)
+            freq_arr = 0
+            if inverse_mode == True :
+                freq_arr = bad_math.bad_idft(in_arr)
+            else :          
+                freq_arr = bad_math.bad_dft(in_arr)
             
             for j in range(inner_size):
                 if row_mode :
@@ -411,6 +472,45 @@ def im_1d_transform(im_in,row_mode):
 
     return arr_out
                     
+
+#zero out all values under pct percentile (pct is floating point 0-1)
+def cull_3d_arry(arr_in, pct):
+    arr_1d = []
     
- 
+    for i in range(len(arr_in)):
+        for j in range(len(arr_in[1])):
+            for color in range(colors):
+                arr_1d.append(arr_in[i][j][color])
+                    
+#    s_arr_wd = bad_math.sort_by_mag(arr_1d)
+    s_arr_wd = arr_1d.sort()
+    
+    t_index = pct * len(arr_1d)
+    if t_index >= len(arr_1d):
+        t_index = len(arr_1d) - 1;
+    elif t_index <= 0:
+        t_index = 0
+        
+    threshold = cmath.magnitude(s_arr_wd[t_index])
+    
+    arr_3d_out = []
+    
+    for i in range(len(arr_in)):
+        arr_2d_out = []
+        for j in range(len(arr_in[1])):
+            arr_1d_out = []
+            for color in range(colors):
+                outval = 0
+                inval = arr_in[i][j][color]
+                if cmath.magnitude(inval) < threshold :
+                    outval = complex(0,0)
+                else :
+                    outval = arr_in[i][j][color]
+                arr_1d_out.append(outval)
+            arr_2d_out.append(arr_1d_out)
+        arr_3d_out.append(arr_2d_out)
+    return arr_3d_out
+    
+
+
                 
