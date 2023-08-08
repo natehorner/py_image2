@@ -364,9 +364,9 @@ def im_min(im1,im2):
 
 
 def im_to_3d_arr(im_in) :
-    
     width,height = im_in.size
     arr_out = [];
+    print("begining im_to_3d_arr size = " + str(width) + "," + str(height) )
     
     for i in range(width):
         arr_2d_out = []
@@ -389,6 +389,7 @@ def carr_to_im(arr_in, concat_mode) :
     
     width = len(arr_in)
     height = len(arr_in[0])
+    print("begining carr_to_im size = " + str(width) + "," + str(height) )
     
     im_out = Image.new(mode="RGB",size=(width,height))
  
@@ -403,7 +404,7 @@ def carr_to_im(arr_in, concat_mode) :
                 if concat_mode == True :
                     val = round(ival.real)
                 else:
-                    val = round( cmath.magnitude(ival) )
+                    val = round( abs(ival) )
                     
                 if val > 255:
                     val = 255
@@ -421,7 +422,8 @@ def transform_2d_arr_1d(arr_in,row_mode,inverse_mode):
        
     width = len(arr_in)
     height = len(arr_in[0])
-    
+    print("Beginning transform 2d_arr_1d size = " +str(width) +  "," 
+          + str(height))
     arr_out = [];
     for i in range(width):
         arr_2d_out = []
@@ -475,6 +477,8 @@ def transform_2d_arr_1d(arr_in,row_mode,inverse_mode):
 
 #zero out all values under pct percentile (pct is floating point 0-1)
 def cull_3d_arry(arr_in, pct):
+    print("begining cull_3d_array" )
+    
     arr_1d = []
     
     for i in range(len(arr_in)):
@@ -482,8 +486,7 @@ def cull_3d_arry(arr_in, pct):
             for color in range(colors):
                 arr_1d.append(arr_in[i][j][color])
                     
-#    s_arr_wd = bad_math.sort_by_mag(arr_1d)
-    s_arr_wd = arr_1d.sort()
+    s_arr_wd = bad_math.sort_by_mag(arr_1d)
     
     t_index = pct * len(arr_1d)
     if t_index >= len(arr_1d):
@@ -491,8 +494,8 @@ def cull_3d_arry(arr_in, pct):
     elif t_index <= 0:
         t_index = 0
         
-    threshold = cmath.magnitude(s_arr_wd[t_index])
-    
+    threshold = abs(s_arr_wd[t_index])
+    print("Threshold magnitude = " + threshold) 
     arr_3d_out = []
     
     for i in range(len(arr_in)):
@@ -502,7 +505,7 @@ def cull_3d_arry(arr_in, pct):
             for color in range(colors):
                 outval = 0
                 inval = arr_in[i][j][color]
-                if cmath.magnitude(inval) < threshold :
+                if abs(inval) < threshold :
                     outval = complex(0,0)
                 else :
                     outval = arr_in[i][j][color]
