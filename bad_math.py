@@ -10,7 +10,7 @@ bad implementations of math stuff
 """
 
 import cmath
-import math
+#import math
 
 def bad_dft(in_arr):
     
@@ -48,38 +48,43 @@ def bad_idft(in_arr):
         
         out_arr.append(csum)
     return out_arr
+
+
+#insertion sort - better because the numbers can be so granular
+def isort_by_mag(in_arr):
+    N= len(in_arr)
     
+    for i in range(N):
+        val = in_arr[i]
+        val_mag = abs(in_arr[i])
+        j = i-1
+        while j>=0 and abs(in_arr[j]) < val_mag :
+            in_arr[j+1] = in_arr[j]
+            j-=1
+        in_arr[j+1] = val
+        
+        if i%10000 == 0 :
+            print("insertion sort " + str(100*i/N) + "%")
+                  
+    return in_arr
+            
+
 def sort_by_mag(in_arr):
     
     N = len(in_arr)
-    
+    print("Starting sort_by_mag size " + str(N))    
     if N <= 1 :
         return in_arr
     
-    #check first, middle, last and find middle
-    threshold = 0
-    magf = abs(in_arr[0])
-    magm = abs(in_arr[ round(N/2) ])
-    magl = abs(in_arr[N-1])
+    threshold = (abs(in_arr[0]) + abs(in_arr[N-1]) )/2
 
-    #ugly because we don't want to sort within a sort...
-    if magf < magm and magf > magl:
-        threshold = magf
-    elif magf > magm and magf < magl:
-        threshold = magf
-    elif magm < magf and magm > magl:
-        threshold = magm
-    elif magm > magf and magm < magl:
-        threshold = magm
-    else:
-        threshold = magl
-        
+    print(str(abs(in_arr[0])) +","+str(abs(in_arr[N-1]))+" : " + str(threshold))    
     sub_arr_lower = []
     sub_arr_higher = []
     
     #check if array is already sorted...
     is_sorted = True
-    sorted_last_m = magf
+    sorted_last_m = abs(in_arr[0])
     
     #make 2 sub arrays, less than eq the threshold and greater than
     for n in range(N):

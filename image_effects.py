@@ -486,7 +486,7 @@ def cull_3d_arry(arr_in, pct):
             for color in range(colors):
                 arr_1d.append(arr_in[i][j][color])
                     
-    s_arr_wd = bad_math.sort_by_mag(arr_1d)
+    s_arr_wd = bad_math.isort_by_mag(arr_1d)
     
     t_index = pct * len(arr_1d)
     if t_index >= len(arr_1d):
