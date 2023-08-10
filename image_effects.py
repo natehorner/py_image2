@@ -464,7 +464,7 @@ def transform_2d_arr_1d(arr_in,row_mode,inverse_mode):
             if inverse_mode == True :
                 freq_arr = bad_math.bad_idft(in_arr)
             else :          
-                freq_arr = bad_math.bad_dft(in_arr)
+                freq_arr = bad_math.bad_dft(in_arr,True)
             
             for j in range(inner_size):
                 if row_mode :
@@ -486,16 +486,16 @@ def cull_3d_arry(arr_in, pct):
             for color in range(colors):
                 arr_1d.append(arr_in[i][j][color])
                     
-    s_arr_wd = bad_math.isort_by_mag(arr_1d)
+    s_arr_wd = bad_math.sort_by_mag(arr_1d)
     
-    t_index = pct * len(arr_1d)
+    t_index = round(pct * len(arr_1d))
     if t_index >= len(arr_1d):
         t_index = len(arr_1d) - 1;
     elif t_index <= 0:
         t_index = 0
         
     threshold = abs(s_arr_wd[t_index])
-    print("Threshold magnitude = " + threshold) 
+    print("Threshold magnitude = " + str(threshold) )
     arr_3d_out = []
     
     for i in range(len(arr_in)):

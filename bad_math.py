@@ -12,7 +12,7 @@ bad implementations of math stuff
 import cmath
 #import math
 
-def bad_dft(in_arr):
+def bad_dft(in_arr,do_rounding):
     
     N = len(in_arr)
     
@@ -28,6 +28,11 @@ def bad_dft(in_arr):
             #cumulate in_arr[n] * e^(-2*i*pi*f*n/N)
             csum = csum + in_arr[n] * cmath.exp(complex(0,-2)*cmath.pi*f*n/N)
         
+        if do_rounding == True:
+            real = round(csum.real)
+            imag = round(csum.imag)
+            csum = complex(real,imag)
+            
         out_arr.append(csum)
     return out_arr
 
@@ -75,27 +80,35 @@ def sort_by_mag(in_arr):
     print("Starting sort_by_mag size " + str(N))    
     if N <= 1 :
         return in_arr
+    if N < 1000 :
+        return isort_by_mag(in_arr)
     
-    threshold = (abs(in_arr[0]) + abs(in_arr[N-1]) )/2
+    threshold = round(abs(in_arr[0]))
 
-    print(str(abs(in_arr[0])) +","+str(abs(in_arr[N-1]))+" : " + str(threshold))    
     sub_arr_lower = []
     sub_arr_higher = []
     
+    #getting A LOT of repeted values so creating 3 - higher lower and same to 
+    #prevent infinite loops where both indices are same but other smaller 
+    #values are in array, causing infinte recursion
+    sub_arr_same = []
+    
     #check if array is already sorted...
     is_sorted = True
-    sorted_last_m = abs(in_arr[0])
+    sorted_last_m = round(abs(in_arr[0]))
     
-    #make 2 sub arrays, less than eq the threshold and greater than
+    #make 3 sub arrays, less than thres, eq, and greater than
     for n in range(N):
         
-        magn = abs(in_arr[n])
+        magn = round(abs(in_arr[n]))
         
         #add to sub lists
-        if magn <= threshold :
+        if magn < threshold :
             sub_arr_lower.append(in_arr[n])
+        elif magn > threshold :
+            sub_arr_higher.append(in_arr[n])           
         else:
-            sub_arr_higher.append(in_arr[n])
+            sub_arr_same.append(in_arr[n])
             
         
         #check if list is sorted
@@ -111,6 +124,7 @@ def sort_by_mag(in_arr):
     sorted_low = sort_by_mag(sub_arr_lower)
     sorted_high = sort_by_mag(sub_arr_higher)
     
+    sorted_low.extend(sub_arr_same)
     sorted_low.extend(sorted_high)
     return sorted_low
         

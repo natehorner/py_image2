@@ -15,8 +15,8 @@ open the file -     any jpg, png or other files in same directory
                     DOES NOT SUPPORT BLACK AND WHITE IMAGES RIGHT NOW!
                     (or multi layered - expects 3 values per pixel)
 """
-im_in = Image.open("images/checkerboard2.png")
-#im_in = Image.open("images/cold.jpg")
+#im_in = Image.open("images/checkerboard2.png")
+im_in = Image.open("images/cold.jpg")
 #im_in = Image.open("images/bird.jpg")
 #im_in = Image.open("images/sample.jpg")
 
@@ -48,9 +48,16 @@ im_in = Image.open("images/checkerboard2.png")
 
 arr_in = image_effects.im_to_3d_arr(im_in)
 arr_transf = image_effects.transform_2d_arr_1d(arr_in, True, False)
+#arr_culled = arr_transf
 arr_culled = image_effects.cull_3d_arry(arr_transf, .5)
 arr_invtransf = image_effects.transform_2d_arr_1d(arr_culled, True, True)
 im_out = image_effects.carr_to_im(arr_invtransf, True)
 
+
+im_diff = image_effects.im_diff(im_in,im_out,False)
+
 im_out.show()
 im_in.show()
+im_diff.show()
+
+
